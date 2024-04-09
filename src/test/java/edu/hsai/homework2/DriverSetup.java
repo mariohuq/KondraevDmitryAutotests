@@ -3,13 +3,13 @@ package edu.hsai.homework2;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 
 public class DriverSetup {
     protected static WebDriver driver;
 
-    @BeforeTest
+    @BeforeClass
     public static void setup() {
         System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver");
         System.setProperty("webdriver.http.factory", "jdk-http-client");
@@ -27,7 +27,7 @@ public class DriverSetup {
         driver.findElement(By.id("login-button")).click();
     }
 
-    @AfterTest
+    @AfterClass
     public static void exit() {
         //10. Close Browser
         driver.close();
