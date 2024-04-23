@@ -31,3 +31,6 @@ out/
 
 # maven
 target/
+
+# allure
+allure-results/

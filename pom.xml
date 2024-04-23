@@ -12,6 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
+        <aspectj.version>1.9.22</aspectj.version>
     </properties>
 
     <profiles>
@@ -19,6 +20,24 @@
             <id>suite-for-hw2</id>
             <properties>
                 <testng.suite.file>${project.build.testOutputDirectory}/suite-for-hw2.xml</testng.suite.file>
+            </properties>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>suite-for-hw3</id>
+            <properties>
+                <testng.suite.file>${project.build.testOutputDirectory}/suite-for-hw3.xml</testng.suite.file>
+            </properties>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>suite-for-hw4</id>
+            <properties>
+                <testng.suite.file>${project.build.testOutputDirectory}/suite-for-hw4.xml</testng.suite.file>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -63,8 +82,25 @@
             <artifactId>selenium-http-jdk-client</artifactId>
             <version>4.8.1</version>
         </dependency>
+        <!-- Homework 4 -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-testng</artifactId>
+            <version>2.22.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.maven.plugins</groupId>-->
+<!--            <artifactId>maven-surefire-plugin</artifactId>-->
+<!--            <version>2.22.2</version>-->
+<!--        </dependency>-->
     </dependencies>
-
     <build>
         <pluginManagement>
             <plugins>
@@ -78,6 +114,26 @@
                     <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.2</version>
+                    <configuration>
+                        <argLine>
+                            -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                        </argLine>
+                        <suiteXmlFiles>
+                            <suiteXmlFile>${testng.suite.file}</suiteXmlFile>
+                        </suiteXmlFiles>
+                        <systemPropertyVariables>
+                            <property>
+                                <name>allure.results.directory</name>
+                                <value>${project.build.directory}allure-results</value>
+                            </property>
+                        </systemPropertyVariables>
+                        <testFailureIgnore>false</testFailureIgnore>
                     </configuration>
                 </plugin>
             </plugins>
